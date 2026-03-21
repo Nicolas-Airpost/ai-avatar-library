@@ -964,7 +964,7 @@
         }
 
         .gallery-thumb.is-cover::after {
-            content: 'Ã¢ÂÂ COVER';
+            content: 'ÃÂ¢ÃÂÃÂ COVER';
             position: absolute;
             top: 4px;
             left: 4px;
@@ -1280,62 +1280,18 @@
             <!-- New Avatar Form -->
             <div class="form-container" data-form="new">
                 <div class="form-section">
-                    <h2 style="margin-bottom: 1.5rem;">Create New Avatar</h2>
-
-                    <div class="form-group">
-                        <label class="form-label required">Avatar Name</label>
-                        <input type="text" class="form-input" id="new-avatar-name" placeholder="e.g., Sarah Chen">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required">Gender</label>
-                        <select class="form-select" id="new-avatar-gender">
-                            <option value="">Select gender...</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Non-binary">Non-binary</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required">Age Range</label>
-                        <select class="form-select" id="new-avatar-age">
-                            <option value="">Select age range...</option>
-                            <option value="18-25">18-25</option>
-                            <option value="25-35">25-35</option>
-                            <option value="35-45">35-45</option>
-                            <option value="45-60">45-60</option>
-                            <option value="60+">60+</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required">Ethnicity</label>
-                        <select class="form-select" id="new-avatar-ethnicity">
-                            <option value="">Select ethnicity...</option>
-                            <option value="Asian">Asian</option>
-                            <option value="Black">Black</option>
-                            <option value="Caucasian">Caucasian</option>
-                            <option value="Hispanic">Hispanic</option>
-                            <option value="Middle Eastern">Middle Eastern</option>
-                            <option value="Mixed">Mixed</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Style</label>
-                        <select class="form-select" id="new-avatar-style">
-                            <option value="Realistic">Realistic</option>
-                            <option value="Animated">Animated</option>
-                            <option value="Stylized">Stylized</option>
-                        </select>
-                    </div>
-
-                    <!-- Dynamic Fields for New Avatar -->
-                    <div id="dynamic-fields-new"></div>
-
-                    <!-- Form Actions -->
-                    <div class="form-submit">
+<h2>AI Avatar Request</h2>
+<p style="color:var(--text-secondary);margin-bottom:1.5rem">This form acts as your character's base sheet. Provide high detail for best results.</p>
+<div class="form-grid-2col"><div class="form-group"><label class="form-label required">Avatar Name</label><input type="text" class="form-input" id="new-avatar-name" name="avatar_name" placeholder="e.g., Sarah Anderson"></div><div class="form-group"><label class="form-label required">Client</label><select class="form-select" name="new_client"><option value="">Select...</option><option value="acme">Acme Corp</option><option value="techstart">TechStart Inc</option><option value="innovate">Innovate Solutions</option><option value="other">Other</option></select></div></div>
+<div class="form-grid-2col"><div class="form-group"><label class="form-label required">Avatar Age Range</label><select class="form-select" id="new-avatar-age" name="age"><option value="">Select...</option><option value="Young Adult (18-29)">Young Adult (18-29)</option><option value="Adult (30-45)">Adult (30-45)</option><option value="Middle-Aged (45-60)">Middle-Aged (45-60)</option><option value="Senior / Elderly (+60)">Senior / Elderly (+60)</option></select></div><div class="form-group"><label class="form-label required">Avatar Ethnicity</label><select class="form-select" id="new-avatar-ethnicity" name="ethnicity"><option value="">Select...</option><option value="Caucasian">Caucasian</option><option value="Hispanic/Latino">Hispanic/Latino</option><option value="Black/African">Black/African</option><option value="Asian">Asian</option><option value="Middle Eastern">Middle Eastern</option><option value="South Asian">South Asian</option><option value="Mixed/Other">Mixed/Other</option></select></div></div>
+<div class="form-grid-2col"><div class="form-group"><label class="form-label required">Height</label><select class="form-select" name="height"><option value="">Select...</option><option value="Short">Short</option><option value="Average">Average</option><option value="Tall">Tall</option></select></div><div class="form-group"><label class="form-label required">Avatar Gender</label><select class="form-select" id="new-avatar-gender" name="gender"><option value="">Select...</option><option value="Male">Male</option><option value="Female">Female</option><option value="Non-binary">Non-binary</option></select></div></div>
+<div class="form-grid-2col"><div class="form-group"><label class="form-label required">Location (BETA)</label><input type="text" class="form-input" name="location" placeholder="Typical locations..."></div><div class="form-group"><label class="form-label">Avatar Usual Outfit</label><input type="text" class="form-input" name="outfit" placeholder="e.g., Business casual, blazer..."></div></div>
+<div class="form-grid-2col"><div class="form-group"><label class="form-label required">ICP</label><input type="text" class="form-input" name="icp" placeholder="Ideal Customer Profile"></div><div class="form-group"><label class="form-label">Hair Style</label><input type="text" class="form-input" name="hair_style" placeholder="e.g., Short and wavy"></div></div>
+<div class="form-grid-2col"><div class="form-group"><label class="form-label">Hair Color</label><select class="form-select" name="hair_color"><option value="">Select...</option><option value="Black">Black</option><option value="Brown">Brown</option><option value="Blonde">Blonde</option><option value="Red">Red</option><option value="Gray">Gray</option><option value="White">White</option><option value="Other">Other</option></select></div><div class="form-group"><label class="form-label">Eye Color</label><select class="form-select" name="eye_color"><option value="">Select...</option><option value="Brown">Brown</option><option value="Blue">Blue</option><option value="Green">Green</option><option value="Hazel">Hazel</option><option value="Gray">Gray</option><option value="Other">Other</option></select></div></div>
+<div class="form-grid-2col"><div class="form-group"><label class="form-label required">Body Type</label><select class="form-select" name="body_type"><option value="">Select...</option><option value="Slim">Slim</option><option value="Average">Average</option><option value="Athletic">Athletic</option><option value="Plus Size">Plus Size</option></select></div><div class="form-group"><label class="form-label">Distinguishing Features</label><input type="text" class="form-input" name="distinguishing_features" placeholder="Glasses, freckles, mole..."></div></div>
+<div class="form-group"><label class="form-label">Reference Image</label><input type="file" class="form-input" name="reference_image" accept="image/*" style="padding:0.5rem"></div>
+<div class="form-group"><label class="form-label">Any other instructions or requirements?</label><textarea class="form-textarea" name="new_instructions" placeholder="Additional notes..."></textarea></div>
+<div class="form-submit">
                         <button class="btn-submit" id="submit-new-btn">Create Avatar</button>
                         <button class="btn-reset" id="reset-new-btn">Clear</button>
                     </div>
@@ -1430,7 +1386,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Emoji</label>
-                    <input type="text" class="form-input" id="avatar-form-emoji" maxlength="1" placeholder="Ã°ÂÂÂ¤">
+                    <input type="text" class="form-input" id="avatar-form-emoji" maxlength="1" placeholder="ÃÂ°ÃÂÃÂÃÂ¤">
                 </div>
 
                 <div class="form-actions">
@@ -1449,7 +1405,7 @@
                 <button class="modal-close" id="detail-modal-close">&times;</button>
             </div>
 
-            <div class="detail-image" id="detail-image">Ã°ÂÂÂ¤</div>
+            <div class="detail-image" id="detail-image">ÃÂ°ÃÂÃÂÃÂ¤</div>
 
             <div class="detail-info">
                 <div class="detail-row">
@@ -1479,7 +1435,7 @@
                 <div class="detail-gallery-title">
                     Images
                     <button type="button" class="gallery-upload-btn" id="upload-image-btn" style="width: auto; aspect-ratio: unset; padding: 0.5rem 1rem; border: none; background: none; color: var(--accent); font-size: 0.9rem;">
-                        <span class="upload-icon">Ã¢Â¬ÂÃ¯Â¸Â</span>
+                        <span class="upload-icon">ÃÂ¢ÃÂ¬ÃÂÃÂ¯ÃÂ¸ÃÂ</span>
                         Upload
                     </button>
                 </div>
@@ -1772,7 +1728,7 @@
                 const coverImage = avatar.cover_image_url || null;
                 const displayContent = coverImage ?
                     `<img src="${coverImage}" alt="${avatar.name}">` :
-                    avatar.emoji || 'Ã°ÂÂÂ¤';
+                    avatar.emoji || 'ÃÂ°ÃÂÃÂÃÂ¤';
 
                 card.innerHTML = `
                     <div class="avatar-image" style="${coverImage ? '' : 'font-size: 3rem;'}">
@@ -1781,8 +1737,8 @@
                             <span>Click to view details</span>
                         </div>
                         <div class="avatar-card-actions">
-                            <button class="card-action-btn edit-avatar-btn" title="Edit">Ã¢ÂÂÃ¯Â¸Â</button>
-                            <button class="card-action-btn delete-avatar-quick-btn" title="Delete">Ã°ÂÂÂÃ¯Â¸Â</button>
+                            <button class="card-action-btn edit-avatar-btn" title="Edit">ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
+                            <button class="card-action-btn delete-avatar-quick-btn" title="Delete">ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
                         </div>
                     </div>
                     <div class="avatar-info">
@@ -1829,7 +1785,7 @@
                 const coverImage = avatar.cover_image_url || null;
                 const displayContent = coverImage ?
                     `<img src="${coverImage}" alt="${avatar.name}">` :
-                    avatar.emoji || 'Ã°ÂÂÂ¤';
+                    avatar.emoji || 'ÃÂ°ÃÂÃÂÃÂ¤';
 
                 card.innerHTML = `
                     <div class="avatar-image" style="${coverImage ? '' : 'font-size: 2rem;'}">
@@ -1880,7 +1836,7 @@
             if (avatar.cover_image_url) {
                 imageContainer.innerHTML = `<img src="${avatar.cover_image_url}" alt="${avatar.name}">`;
             } else {
-                imageContainer.textContent = avatar.emoji || 'Ã°ÂÂÂ¤';
+                imageContainer.textContent = avatar.emoji || 'ÃÂ°ÃÂÃÂÃÂ¤';
             }
 
             // Render gallery
@@ -1902,8 +1858,8 @@
                     thumb.innerHTML = `
                         <img src="${image.image_url}" alt="Avatar image">
                         <div class="gallery-thumb-actions">
-                            <button class="gallery-thumb-btn set-cover-btn" title="Set as cover">Ã¢Â­Â</button>
-                            <button class="gallery-thumb-btn delete-image-btn" title="Delete">Ã°ÂÂÂÃ¯Â¸Â</button>
+                            <button class="gallery-thumb-btn set-cover-btn" title="Set as cover">ÃÂ¢ÃÂ­ÃÂ</button>
+                            <button class="gallery-thumb-btn delete-image-btn" title="Delete">ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
                         </div>
                     `;
 
@@ -1939,7 +1895,7 @@
                 document.getElementById('avatar-form-age').value = avatar.age;
                 document.getElementById('avatar-form-ethnicity').value = avatar.ethnicity;
                 document.getElementById('avatar-form-style').value = avatar.style;
-                document.getElementById('avatar-form-emoji').value = avatar.emoji || 'Ã°ÂÂÂ¤';
+                document.getElementById('avatar-form-emoji').value = avatar.emoji || 'ÃÂ°ÃÂÃÂÃÂ¤';
                 form.dataset.avatarId = avatar.id;
             } else {
                 title.textContent = 'Add Avatar';
@@ -2014,7 +1970,7 @@
                 age: document.getElementById('avatar-form-age').value,
                 ethnicity: document.getElementById('avatar-form-ethnicity').value,
                 style: document.getElementById('avatar-form-style').value,
-                emoji: document.getElementById('avatar-form-emoji').value || 'Ã°ÂÂÂ¤'
+                emoji: document.getElementById('avatar-form-emoji').value || 'ÃÂ°ÃÂÃÂÃÂ¤'
             };
 
             const form = document.getElementById('avatar-form');
@@ -2172,7 +2128,7 @@
                 age: document.getElementById('new-avatar-age').value,
                 ethnicity: document.getElementById('new-avatar-ethnicity').value,
                 style: document.getElementById('new-avatar-style').value,
-                emoji: 'Ã°ÂÂÂ¤'
+                emoji: 'ÃÂ°ÃÂÃÂÃÂ¤'
             };
 
             if (!avatarData.name || !avatarData.gender || !avatarData.age || !avatarData.ethnicity) {
@@ -2226,8 +2182,8 @@
                         </div>
                     </div>
                     <div class="field-card-actions">
-                        <button class="field-action-btn edit-field-btn" title="Edit">Ã¢ÂÂÃ¯Â¸Â</button>
-                        <button class="field-action-btn delete-field-btn" title="Delete">Ã°ÂÂÂÃ¯Â¸Â</button>
+                        <button class="field-action-btn edit-field-btn" title="Edit">ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
+                        <button class="field-action-btn delete-field-btn" title="Delete">ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
                     </div>
                 `;
 
