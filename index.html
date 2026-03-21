@@ -10,8 +10,8 @@
             --bg: #0f0f13;
             --surface: #1a1a24;
             --surface-hover: #22222f;
-            --border: #2a2a3a;
-            --accent: #7c5cfc;
+            --border: #e2e8f0;
+            --accent: #6366f1;
             --accent-light: #9b82fc;
             --accent-glow: rgba(124, 92, 252, 0.15);
             --green: #34d399;
@@ -236,7 +236,7 @@
         .avatar-card:hover {
             border-color: var(--accent);
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(124, 92, 252, 0.1);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
         }
 
         .avatar-image {
@@ -279,7 +279,7 @@
         .card-action-btn {
             width: 36px;
             height: 36px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border);
             color: var(--text);
             border-radius: 6px;
@@ -904,7 +904,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -964,7 +964,7 @@
         }
 
         .gallery-thumb.is-cover::after {
-            content: 'ÃÂ¢ÃÂÃÂ COVER';
+            content: 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ COVER';
             position: absolute;
             top: 4px;
             left: 4px;
@@ -1386,7 +1386,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Emoji</label>
-                    <input type="text" class="form-input" id="avatar-form-emoji" maxlength="1" placeholder="ÃÂ°ÃÂÃÂÃÂ¤">
+                    <input type="text" class="form-input" id="avatar-form-emoji" maxlength="1" placeholder="ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤">
                 </div>
 
                 <div class="form-actions">
@@ -1405,7 +1405,7 @@
                 <button class="modal-close" id="detail-modal-close">&times;</button>
             </div>
 
-            <div class="detail-image" id="detail-image">ÃÂ°ÃÂÃÂÃÂ¤</div>
+            <div class="detail-image" id="detail-image">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤</div>
 
             <div class="detail-info">
                 <div class="detail-row">
@@ -1435,7 +1435,7 @@
                 <div class="detail-gallery-title">
                     Images
                     <button type="button" class="gallery-upload-btn" id="upload-image-btn" style="width: auto; aspect-ratio: unset; padding: 0.5rem 1rem; border: none; background: none; color: var(--accent); font-size: 0.9rem;">
-                        <span class="upload-icon">ÃÂ¢ÃÂ¬ÃÂÃÂ¯ÃÂ¸ÃÂ</span>
+                        <span class="upload-icon">ÃÂÃÂ¢ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ</span>
                         Upload
                     </button>
                 </div>
@@ -1728,7 +1728,7 @@
                 const coverImage = avatar.cover_image_url || null;
                 const displayContent = coverImage ?
                     `<img src="${coverImage}" alt="${avatar.name}">` :
-                    avatar.emoji || 'ÃÂ°ÃÂÃÂÃÂ¤';
+                    avatar.emoji || 'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤';
 
                 card.innerHTML = `
                     <div class="avatar-image" style="${coverImage ? '' : 'font-size: 3rem;'}">
@@ -1737,8 +1737,8 @@
                             <span>Click to view details</span>
                         </div>
                         <div class="avatar-card-actions">
-                            <button class="card-action-btn edit-avatar-btn" title="Edit">ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
-                            <button class="card-action-btn delete-avatar-quick-btn" title="Delete">ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
+                            <button class="card-action-btn edit-avatar-btn" title="Edit">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ</button>
+                            <button class="card-action-btn delete-avatar-quick-btn" title="Delete">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ</button>
                         </div>
                     </div>
                     <div class="avatar-info">
@@ -1785,7 +1785,7 @@
                 const coverImage = avatar.cover_image_url || null;
                 const displayContent = coverImage ?
                     `<img src="${coverImage}" alt="${avatar.name}">` :
-                    avatar.emoji || 'ÃÂ°ÃÂÃÂÃÂ¤';
+                    avatar.emoji || 'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤';
 
                 card.innerHTML = `
                     <div class="avatar-image" style="${coverImage ? '' : 'font-size: 2rem;'}">
@@ -1836,7 +1836,7 @@
             if (avatar.cover_image_url) {
                 imageContainer.innerHTML = `<img src="${avatar.cover_image_url}" alt="${avatar.name}">`;
             } else {
-                imageContainer.textContent = avatar.emoji || 'ÃÂ°ÃÂÃÂÃÂ¤';
+                imageContainer.textContent = avatar.emoji || 'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤';
             }
 
             // Render gallery
@@ -1858,8 +1858,8 @@
                     thumb.innerHTML = `
                         <img src="${image.image_url}" alt="Avatar image">
                         <div class="gallery-thumb-actions">
-                            <button class="gallery-thumb-btn set-cover-btn" title="Set as cover">ÃÂ¢ÃÂ­ÃÂ</button>
-                            <button class="gallery-thumb-btn delete-image-btn" title="Delete">ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
+                            <button class="gallery-thumb-btn set-cover-btn" title="Set as cover">ÃÂÃÂ¢ÃÂÃÂ­ÃÂÃÂ</button>
+                            <button class="gallery-thumb-btn delete-image-btn" title="Delete">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ</button>
                         </div>
                     `;
 
@@ -1895,7 +1895,7 @@
                 document.getElementById('avatar-form-age').value = avatar.age;
                 document.getElementById('avatar-form-ethnicity').value = avatar.ethnicity;
                 document.getElementById('avatar-form-style').value = avatar.style;
-                document.getElementById('avatar-form-emoji').value = avatar.emoji || 'ÃÂ°ÃÂÃÂÃÂ¤';
+                document.getElementById('avatar-form-emoji').value = avatar.emoji || 'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤';
                 form.dataset.avatarId = avatar.id;
             } else {
                 title.textContent = 'Add Avatar';
@@ -1970,7 +1970,7 @@
                 age: document.getElementById('avatar-form-age').value,
                 ethnicity: document.getElementById('avatar-form-ethnicity').value,
                 style: document.getElementById('avatar-form-style').value,
-                emoji: document.getElementById('avatar-form-emoji').value || 'ÃÂ°ÃÂÃÂÃÂ¤'
+                emoji: document.getElementById('avatar-form-emoji').value || 'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤'
             };
 
             const form = document.getElementById('avatar-form');
@@ -2128,7 +2128,7 @@
                 age: document.getElementById('new-avatar-age').value,
                 ethnicity: document.getElementById('new-avatar-ethnicity').value,
                 style: document.getElementById('new-avatar-style').value,
-                emoji: 'ÃÂ°ÃÂÃÂÃÂ¤'
+                emoji: 'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤'
             };
 
             if (!avatarData.name || !avatarData.gender || !avatarData.age || !avatarData.ethnicity) {
@@ -2182,8 +2182,8 @@
                         </div>
                     </div>
                     <div class="field-card-actions">
-                        <button class="field-action-btn edit-field-btn" title="Edit">ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
-                        <button class="field-action-btn delete-field-btn" title="Delete">ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ</button>
+                        <button class="field-action-btn edit-field-btn" title="Edit">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ</button>
+                        <button class="field-action-btn delete-field-btn" title="Delete">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ</button>
                     </div>
                 `;
 
