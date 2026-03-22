@@ -1,10 +1,1112 @@
-<div class="filter-bar" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:2rem">
-                <select id="filter-gender" class="form-select" style="width:auto;min-width:120px"><option value="">All Genders</option><option value="Male">Male</option><option value="Female">Female</option></select>
-                <select id="filter-age" class="form-select" style="width:auto;min-width:160px"><option value="">All Ages</option><option value="Young Adult (18-29)">Young Adult (18-29)</option><option value="Adult (30-45)">Adult (30-45)</option><option value="Middle-Aged (45-60)">Middle-Aged (45-60)</option><option value="Senior / Elderly (+60)">Senior / Elderly (+60)</option></select>
-                <select id="filter-ethnicity" class="form-select" style="width:auto;min-width:140px"><option value="">All Ethnicities</option><option value="Caucasian">Caucasian</option><option value="Hispanic/Latino">Hispanic/Latino</option><option value="Black/African">Black/African</option><option value="Asian">Asian</option><option value="Middle Eastern">Middle Eastern</option><option value="South Asian">South Asian</option></select>
-                <select id="filter-style" class="form-select" style="width:auto;min-width:130px"><option value="">All Styles</option><option value="Realistic">Realistic</option><option value="Animated">Animated</option><option value="Stylized">Stylized</option></select>
-                <button class="btn-add" id="add-avatar-btn" style="margin-left:auto">+ Add Avatar</button>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airpost - AI Avatar Library & Request Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f7fa;
+            --surface: #ffffff;
+            --surface-hover: #f0f2f5;
+            --border: #e2e8f0;
+            --accent: #6366f1;
+            --accent-light: #9b82fc;
+            --accent-glow: rgba(124, 92, 252, 0.15);
+            --green: #34d399;
+            --pink: #f472b6;
+            --orange: #fb923c;
+            --blue: #60a5fa;
+            --text: #1a202c;
+            --text-muted: #8888a0;
+            --red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 15, 19, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-right: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+
+        .nav-tab.active {
+            color: var(--text);
+            background: var(--accent-glow);
+            border-color: var(--accent);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Avatar Library */
+        .library-header {
+            margin-bottom: 2rem;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .search-filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--surface-hover);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .add-avatar-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-avatar-btn:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* Avatar Grid */
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .avatar-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            group;
+        }
+
+        .avatar-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+        }
+
+        .avatar-image {
+            width: 100%;
+            height: 200px;
+            background: var(--surface-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .avatar-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-image-file-input {
+            display: none;
+        }
+
+        .avatar-card-actions {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .avatar-card:hover .avatar-card-actions {
+            opacity: 1;
+        }
+
+        .card-action-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .card-action-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .avatar-info {
+            padding: 1.5rem;
+        }
+
+        .avatar-name {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .avatar-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .tag-gender {
+            background: rgba(244, 114, 182, 0.2);
+            color: var(--pink);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+        }
+
+        .tag-male {
+            background: rgba(96, 165, 250, 0.2);
+            color: var(--blue);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .tag-female {
+            background: rgba(244, 114, 182, 0.2);
+            color: var(--pink);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+        }
+
+        .tag-age {
+            background: rgba(251, 146, 60, 0.2);
+            color: var(--orange);
+            border: 1px solid rgba(251, 146, 60, 0.3);
+        }
+
+        .tag-ethnicity {
+            background: rgba(52, 211, 153, 0.2);
+            color: var(--green);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .tag-style {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: var(--red);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-file {
+            padding: 1rem;
+            background: var(--surface-hover);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-file:hover {
+            border-color: var(--accent);
+            background: var(--bg);
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .form-checkbox input {
+            width: 1.2rem;
+            height: 1.2rem;
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            border-color: var(--accent-light);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: white;
+            border-color: var(--red);
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        /* Detail Modal */
+        .detail-modal-content {
+            max-width: 600px;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 300px;
+            background: var(--surface-hover);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .detail-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-col {
+            flex: 1;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Request Forms */
+        .forms-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .forms-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: 5;
+            transition: all 0.3s ease;
+        }
+
+        .forms-tab:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+
+        .forms-tab.active {
+            color: var(--text);
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            border-bottom-color: var(--accent-glow);
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-submit {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-submit {
+            flex: 1;
+            padding: 1rem;
+            background: var(--accent);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            flex: 1;
+            padding: 1rem;
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reset:hover {
+            background: var(--surface);
+            border-color: var(--accent);
+        }
+
+        /* Settings */
+        .settings-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .settings-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .settings-tab:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+
+        .settings-tab.active {
+            color: var(--text);
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            border-bottom-color: var(--accent-glow);
+        }
+
+        .settings-content {
+            display: none;
+        }
+
+        .settings-content.active {
+            display: block;
+        }
+
+        .field-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .field-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .field-card:hover {
+            border-color: var(--accent);
+            background: var(--surface-hover);
+        }
+
+        .field-card-info {
+            flex: 1;
+        }
+
+        .field-card-label {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .field-card-details {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .field-type-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .field-required-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .field-card-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .field-action-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .field-action-btn:hover {
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .add-field-btn {
+            padding: 1rem;
+            background: var(--accent-glow);
+            border: 2px dashed var(--accent);
+            color: var(--accent);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .add-field-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Confirmation Modal */
+        .confirmation-modal {
+            max-width: 400px;
+        }
+
+        .confirmation-message {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .confirmation-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .confirmation-actions .btn {
+            flex: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .avatar-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+
+            .search-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                min-width: 100%;
+            }
+
+            .filter-buttons {
+                width: 100%;
+            }
+
+            .modal-content,
+            .detail-modal-content {
+                max-width: 90vw;
+            }
+
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .nav-brand {
+                margin-right: 0;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .hidden-file-input {
+            display: none;
+        }
+
+        .avatar-image-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            flex-direction: column;
+            gap: 0.5rem;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .avatar-image:hover .avatar-image-overlay {
+            opacity: 1;
+        }
+
+        /* Image Gallery in Detail Modal */
+        .detail-gallery {
+            margin-top: 1.5rem;
+        }
+
+        .detail-gallery-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .detail-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.6rem;
+        }
+
+        .gallery-thumb {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gallery-thumb:hover {
+            border-color: var(--accent);
+            transform: scale(1.03);
+        }
+
+        .gallery-thumb.is-cover {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+
+        .gallery-thumb.is-cover::after {
+            content: 'ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ COVER';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: var(--accent);
+            color: white;
+            font-size: 0.5rem;
+            font-weight: 700;
+            padding: 0.15rem 0.35rem;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .gallery-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-thumb-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.75);
+            display: flex;
+            justify-content: center;
+            gap: 0.25rem;
+            padding: 0.3rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .gallery-thumb:hover .gallery-thumb-actions {
+            opacity: 1;
+        }
+
+        .gallery-thumb-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            transition: background 0.15s;
+        }
+
+        .gallery-thumb-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .gallery-upload-btn {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            gap: 0.3rem;
+        }
+
+        .gallery-upload-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-glow);
+        }
+
+        .gallery-upload-btn .upload-icon {
+            font-size: 1.3rem;
+        }
+
+        .success-message {
+            background: rgba(52, 211, 153, 0.2);
+            border: 1px solid var(--green);
+            color: var(--green);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--red);
+            color: var(--red);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--accent-glow);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+    
+        .form-grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .form-grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-brand">AIRPOST</div>
         <div class="nav-tabs">
             <button class="nav-tab active" data-section="library">Avatar Library</button>
             <button class="nav-tab" data-section="footage">Footage Requests</button>
@@ -44,19 +1146,12 @@
             <!-- Search and Filter Bar -->
             <div class="search-filter-bar">
                 <input type="text" class="search-input" id="search-input" placeholder="Search avatars by name...">
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="male">Male</button>
-                    <button class="filter-btn" data-filter="female">Female</button>
-                </div>
-                <button class="add-avatar-btn" id="add-avatar-btn">+ Add Avatar</button>
-            </div>
-
-            <!-- Avatar Grid -->
-            <div class="avatar-grid" id="avatar-grid">
-                <div class="loading-container">
-                    <div class="loading-spinner"></div>
-                    <span>Loading avatars...</span>
+                <div class="filter-buttons" style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+                    <select id="filter-gender" class="form-select" style="width:auto;min-width:120px"><option value="">All Genders</option><option value="Male">Male</option><option value="Female">Female</option></select>
+                    <select id="filter-age" class="form-select" style="width:auto;min-width:160px"><option value="">All Ages</option><option value="Young Adult (18-29)">Young Adult (18-29)</option><option value="Adult (30-45)">Adult (30-45)</option><option value="Middle-Aged (45-60)">Middle-Aged (45-60)</option><option value="Senior / Elderly (+60)">Senior / Elderly (+60)</option></select>
+                    <select id="filter-ethnicity" class="form-select" style="width:auto;min-width:140px"><option value="">All Ethnicities</option><option value="Caucasian">Caucasian</option><option value="Hispanic/Latino">Hispanic/Latino</option><option value="Black/African">Black/African</option><option value="Asian">Asian</option><option value="Middle Eastern">Middle Eastern</option><option value="South Asian">South Asian</option></select>
+                    <select id="filter-style" class="form-select" style="width:auto;min-width:130px"><option value="">All Styles</option><option value="Realistic">Realistic</option><option value="Animated">Animated</option><option value="Stylized">Stylized</option></select>
+                    <button class="btn-add" id="add-avatar-btn" style="margin-left:auto">+ Add Avatar</button>
                 </div>
             </div>
         </section>
@@ -209,38 +1304,14 @@
 
             <!-- Existing Avatar Settings -->
             <div class="settings-content active" data-settings="existing">
-                <h3 style="margin-bottom:1rem;color:var(--text)">Footage Request Form Fields</h3>
-                <p style="color:var(--text-secondary);margin-bottom:1.5rem">Fields shown in the Footage Request form. * = required.</p>
-                <div class="field-list" id="existing-field-list">
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Select Avatar *</span><span style="color:var(--text-secondary)">Dropdown</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Task Name *</span><span style="color:var(--text-secondary)">Text</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Who are you? *</span><span style="color:var(--text-secondary)">Dropdown</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Client *</span><span style="color:var(--text-secondary)">Dropdown</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Deliverables *</span><span style="color:var(--text-secondary)">Number</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Delivery Date *</span><span style="color:var(--text-secondary)">Date</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Priority *</span><span style="color:var(--text-secondary)">Dropdown</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Product / Video Style / Type *</span><span style="color:var(--text-secondary)">Dropdowns</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Environment Details *</span><span style="color:var(--text-secondary)">Text Area</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Link to Shotlist *</span><span style="color:var(--text-secondary)">URL</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Instructions / Actors Needed</span><span style="color:var(--text-secondary)">Text / Number</span></div>
-                </div>
-                <button class="btn-add" style="margin-top:1rem" onclick="alert('Field editor coming soon!')">+ Add Field</button>
+                <div class="field-list" id="field-list-existing"></div>
+                <button class="add-field-btn" id="add-field-existing-btn">+ Add Field</button>
             </div>
 
             <!-- New Avatar Settings -->
             <div class="settings-content" data-settings="new">
-                <h3 style="margin-bottom:1rem;color:var(--text)">AI Avatar Request Form Fields</h3>
-                <p style="color:var(--text-secondary);margin-bottom:1.5rem">Fields shown in the New Avatar request form.</p>
-                <div class="field-list" id="new-field-list">
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Avatar Name * / Client *</span><span style="color:var(--text-secondary)">Text / Dropdown</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Age Range * / Ethnicity *</span><span style="color:var(--text-secondary)">Dropdowns</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Height * / Gender *</span><span style="color:var(--text-secondary)">Dropdowns</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Location * / Usual Outfit</span><span style="color:var(--text-secondary)">Text</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>ICP * / Hair Style</span><span style="color:var(--text-secondary)">Text</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Hair Color / Eye Color / Body Type *</span><span style="color:var(--text-secondary)">Dropdowns</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:var(--surface-hover);border-radius:8px;margin-bottom:0.5rem"><span>Reference Image / Instructions</span><span style="color:var(--text-secondary)">File / Text</span></div>
-                </div>
-                <button class="btn-add" style="margin-top:1rem" onclick="alert('Field editor coming soon!')">+ Add Field</button>
+                <div class="field-list" id="field-list-new"></div>
+                <button class="add-field-btn" id="add-field-new-btn">+ Add Field</button>
             </div>
         </section>
     </div>
@@ -305,7 +1376,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Emoji</label>
-                    <input type="text" class="form-input" id="avatar-form-emoji" maxlength="1" placeholder="ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤">
+                    <input type="text" class="form-input" id="avatar-form-emoji" maxlength="1" placeholder="ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤">
                 </div>
 
                 <div class="form-actions">
@@ -324,7 +1395,7 @@
                 <button class="modal-close" id="detail-modal-close">&times;</button>
             </div>
 
-            <div class="detail-image" id="detail-image">ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤</div>
+            <div class="detail-image" id="detail-image">ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤</div>
 
             <div class="detail-info">
                 <div class="detail-row">
@@ -354,7 +1425,7 @@
                 <div class="detail-gallery-title">
                     Images
                     <button type="button" class="gallery-upload-btn" id="upload-image-btn" style="width: auto; aspect-ratio: unset; padding: 0.5rem 1rem; border: none; background: none; color: var(--accent); font-size: 0.9rem;">
-                        <span class="upload-icon">ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</span>
+                        <span class="upload-icon">ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂ</span>
                         Upload
                     </button>
                 </div>
@@ -390,7 +1461,9 @@
     </div>
 
     <!-- Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+function applyFilters(){var g=document.getElementById("filter-gender"),a=document.getElementById("filter-age"),e=document.getElementById("filter-ethnicity"),s=document.getElementById("filter-style");var gv=g?g.value:"",av=a?a.value:"",ev=e?e.value:"",sv=s?s.value:"";document.querySelectorAll("#avatar-grid .avatar-card").forEach(function(card){var ok=(!gv||card.dataset.gender===gv)&&(!av||card.dataset.age===av)&&(!ev||card.dataset.ethnicity===ev)&&(!sv||card.dataset.style===sv);card.style.display=ok?"":"none";});}["filter-gender","filter-age","filter-ethnicity","filter-style"].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener("change",applyFilters);});(async function(){var sel=document.getElementById("footage-avatar-select");if(!sel)return;try{var r=await sb.from("avatars").select("id,name,emoji").order("name");sel.innerHTML="<option value=\"\">Select an avatar...</option>";(r.data||[]).forEach(function(a){var o=document.createElement("option");o.value=a.id;o.textContent=(a.emoji||"")+" "+a.name;sel.appendChild(o);});}catch(e){console.error(e);}})();
+</script>
 
     <!-- Main Application -->
     <script>
@@ -647,7 +1720,7 @@
                 const coverImage = avatar.cover_image_url || null;
                 const displayContent = coverImage ?
                     `<img src="${coverImage}" alt="${avatar.name}">` :
-                    avatar.emoji || 'ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
+                    avatar.emoji || 'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
 
                 card.innerHTML = `
                     <div class="avatar-image" style="${coverImage ? '' : 'font-size: 3rem;'}">
@@ -656,8 +1729,8 @@
                             <span>Click to view details</span>
                         </div>
                         <div class="avatar-card-actions">
-                            <button class="card-action-btn edit-avatar-btn">Edit</button>
-                            <button class="card-action-btn delete-avatar-quick-btn">Delete</button>
+                            <button class="card-action-btn edit-avatar-btn" title="Edit">Edit</button>
+                            <button class="card-action-btn delete-avatar-quick-btn" title="Delete">Delete</button>
                         </div>
                     </div>
                     <div class="avatar-info">
@@ -704,7 +1777,7 @@
                 const coverImage = avatar.cover_image_url || null;
                 const displayContent = coverImage ?
                     `<img src="${coverImage}" alt="${avatar.name}">` :
-                    avatar.emoji || 'ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
+                    avatar.emoji || 'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
 
                 card.innerHTML = `
                     <div class="avatar-image" style="${coverImage ? '' : 'font-size: 2rem;'}">
@@ -755,7 +1828,7 @@
             if (avatar.cover_image_url) {
                 imageContainer.innerHTML = `<img src="${avatar.cover_image_url}" alt="${avatar.name}">`;
             } else {
-                imageContainer.textContent = avatar.emoji || 'ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
+                imageContainer.textContent = avatar.emoji || 'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
             }
 
             // Render gallery
@@ -777,8 +1850,8 @@
                     thumb.innerHTML = `
                         <img src="${image.image_url}" alt="Avatar image">
                         <div class="gallery-thumb-actions">
-                            <button class="gallery-thumb-btn set-cover-btn" title="Set as cover">ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
-                            <button class="gallery-thumb-btn delete-image-btn" title="Delete">ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
+                            <button class="gallery-thumb-btn set-cover-btn" title="Set as cover">ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂ</button>
+                            <button class="gallery-thumb-btn delete-image-btn" title="Delete">ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂ</button>
                         </div>
                     `;
 
@@ -814,7 +1887,7 @@
                 document.getElementById('avatar-form-age').value = avatar.age;
                 document.getElementById('avatar-form-ethnicity').value = avatar.ethnicity;
                 document.getElementById('avatar-form-style').value = avatar.style;
-                document.getElementById('avatar-form-emoji').value = avatar.emoji || 'ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
+                document.getElementById('avatar-form-emoji').value = avatar.emoji || 'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
                 form.dataset.avatarId = avatar.id;
             } else {
                 title.textContent = 'Add Avatar';
@@ -889,7 +1962,7 @@
                 age: document.getElementById('avatar-form-age').value,
                 ethnicity: document.getElementById('avatar-form-ethnicity').value,
                 style: document.getElementById('avatar-form-style').value,
-                emoji: document.getElementById('avatar-form-emoji').value || 'ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤'
+                emoji: document.getElementById('avatar-form-emoji').value || 'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤'
             };
 
             const form = document.getElementById('avatar-form');
@@ -1047,7 +2120,7 @@
                 age: document.getElementById('new-avatar-age').value,
                 ethnicity: document.getElementById('new-avatar-ethnicity').value,
                 style: document.getElementById('new-avatar-style').value,
-                emoji: 'ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤'
+                emoji: 'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤'
             };
 
             if (!avatarData.name || !avatarData.gender || !avatarData.age || !avatarData.ethnicity) {
@@ -1101,8 +2174,8 @@
                         </div>
                     </div>
                     <div class="field-card-actions">
-                        <button class="field-action-btn edit-field-btn" title="Edit">ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
-                        <button class="field-action-btn delete-field-btn" title="Delete">ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
+                        <button class="field-action-btn edit-field-btn" title="Edit">ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂ</button>
+                        <button class="field-action-btn delete-field-btn" title="Delete">ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂ</button>
                     </div>
                 `;
 
@@ -1162,35 +2235,6 @@
         }
 
         initApp();
-    
-        // === ADVANCED FILTERS ===
-        function applyFilters() {
-            const g = document.getElementById('filter-gender')?.value || '';
-            const a = document.getElementById('filter-age')?.value || '';
-            const e = document.getElementById('filter-ethnicity')?.value || '';
-            const s = document.getElementById('filter-style')?.value || '';
-            const q = document.getElementById('search-input')?.value?.toLowerCase() || '';
-            document.querySelectorAll('#avatar-grid .avatar-card').forEach(card => {
-                const show = (!g || card.dataset.gender === g) && (!a || card.dataset.age === a) && (!e || card.dataset.ethnicity === e) && (!s || card.dataset.style === s) && (!q || (card.dataset.name||'').toLowerCase().includes(q));
-                card.style.display = show ? '' : 'none';
-            });
-        }
-        ['filter-gender','filter-age','filter-ethnicity','filter-style'].forEach(id => {
-            document.getElementById(id)?.addEventListener('change', applyFilters);
-        });
-
-        // === POPULATE AVATAR DROPDOWN ===
-        async function populateAvatarDropdown() {
-            const sel = document.getElementById('footage-avatar-select');
-            if (!sel) return;
-            try {
-                const { data } = await sb.from('avatars').select('id, name, emoji').order('name');
-                sel.innerHTML = '<option value="">Select an avatar...</option>';
-                (data||[]).forEach(a => { const o = document.createElement('option'); o.value = a.id; o.textContent = (a.emoji||'') + ' ' + a.name; sel.appendChild(o); });
-            } catch(e) { console.error(e); }
-        }
-        populateAvatarDropdown();
-    
     </script>
 </body>
 </html>
