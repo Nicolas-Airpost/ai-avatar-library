@@ -1154,6 +1154,13 @@
                     <button class="btn-add" id="add-avatar-btn" style="margin-left:auto">+ Add Avatar</button>
                 </div>
             </div>
+
+            <!-- Avatar Grid -->
+            <div class="avatar-grid" id="avatar-grid">
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
         </section>
 
         <!-- Footage Requests Section -->
@@ -1461,9 +1468,7 @@
     </div>
 
     <!-- Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-function applyFilters(){var g=document.getElementById("filter-gender"),a=document.getElementById("filter-age"),e=document.getElementById("filter-ethnicity"),s=document.getElementById("filter-style");var gv=g?g.value:"",av=a?a.value:"",ev=e?e.value:"",sv=s?s.value:"";document.querySelectorAll("#avatar-grid .avatar-card").forEach(function(card){var ok=(!gv||card.dataset.gender===gv)&&(!av||card.dataset.age===av)&&(!ev||card.dataset.ethnicity===ev)&&(!sv||card.dataset.style===sv);card.style.display=ok?"":"none";});}["filter-gender","filter-age","filter-ethnicity","filter-style"].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener("change",applyFilters);});(async function(){var sel=document.getElementById("footage-avatar-select");if(!sel)return;try{var r=await sb.from("avatars").select("id,name,emoji").order("name");sel.innerHTML="<option value=\"\">Select an avatar...</option>";(r.data||[]).forEach(function(a){var o=document.createElement("option");o.value=a.id;o.textContent=(a.emoji||"")+" "+a.name;sel.appendChild(o);});}catch(e){console.error(e);}})();
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- Main Application -->
     <script>
@@ -1761,50 +1766,38 @@ function applyFilters(){var g=document.getElementById("filter-gender"),a=documen
         }
 
         async function renderFootageAvatarPicker() {
-            const picker = document.getElementById('footage-avatar-picker');
-            picker.innerHTML = '';
+            const sel = document.getElementById('footage-avatar-select');
+            if (!sel) return;
 
-            if (avatars.length === 0) {
-                picker.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No avatars available. Create one first.</div>';
-                return;
-            }
+            sel.innerHTML = '<option value="">Select an avatar...</option>';
 
             avatars.forEach(avatar => {
-                const card = document.createElement('div');
-                card.className = 'avatar-card';
-                card.style.cursor = 'pointer';
-
-                const coverImage = avatar.cover_image_url || null;
-                const displayContent = coverImage ?
-                    `<img src="${coverImage}" alt="${avatar.name}">` :
-                    avatar.emoji || 'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤';
-
-                card.innerHTML = `
-                    <div class="avatar-image" style="${coverImage ? '' : 'font-size: 2rem;'}">
-                        ${displayContent}
-                    </div>
-                    <div class="avatar-info">
-                        <div class="avatar-name">${avatar.name}</div>
-                    </div>
-                `;
-
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('#footage-avatar-picker .avatar-card').forEach(c => {
-                        c.style.borderColor = 'var(--border)';
-                    });
-                    card.style.borderColor = 'var(--accent)';
-                    document.getElementById('selected-avatar-id').value = avatar.id;
-                });
-
-                picker.appendChild(card);
+                const option = document.createElement('option');
+                option.value = avatar.id;
+                option.textContent = (avatar.emoji || '') + ' ' + avatar.name;
+                sel.appendChild(option);
             });
         }
 
         function filterAndSearchAvatars() {
             let filtered = avatars;
 
-            if (currentFilter !== 'all') {
-                filtered = filtered.filter(a => a.gender.toLowerCase() === currentFilter);
+            const genderVal = document.getElementById('filter-gender')?.value || '';
+            const ageVal = document.getElementById('filter-age')?.value || '';
+            const ethnicityVal = document.getElementById('filter-ethnicity')?.value || '';
+            const styleVal = document.getElementById('filter-style')?.value || '';
+
+            if (genderVal) {
+                filtered = filtered.filter(a => a.gender === genderVal);
+            }
+            if (ageVal) {
+                filtered = filtered.filter(a => a.age === ageVal);
+            }
+            if (ethnicityVal) {
+                filtered = filtered.filter(a => a.ethnicity === ethnicityVal);
+            }
+            if (styleVal) {
+                filtered = filtered.filter(a => a.style === styleVal);
             }
 
             if (currentSearchTerm) {
@@ -1943,13 +1936,9 @@ function applyFilters(){var g=document.getElementById("filter-gender"),a=documen
             filterAndSearchAvatars();
         });
 
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                filterAndSearchAvatars();
-            });
+        ['filter-gender', 'filter-age', 'filter-ethnicity', 'filter-style'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('change', filterAndSearchAvatars);
         });
 
         // Event Listeners - Avatar Modal
@@ -2049,7 +2038,7 @@ function applyFilters(){var g=document.getElementById("filter-gender"),a=documen
         async function loadDynamicFields(formType) {
             const fields = await getFormFields(formType === 'existing' ? 'footage' : 'avatar');
             const container = document.getElementById(`dynamic-fields-${formType}`);
-            container.innerHTML = '';
+            if (!container) return;
 
             if (fields.length === 0) {
                 return;
